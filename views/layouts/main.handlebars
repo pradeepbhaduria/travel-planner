@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Travel Planner</title>
+    <!-- Bootstrap core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <link href="../css/travel-planner.css" rel="stylesheet">
+    {{{_sections.trains-query-template}}}
+    {{{_sections.trains-result-template}}}
+    <script id="trains-template" type="text/x-handlebars-template">
+        <h2 class="sub-header">Section Result</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Train No.</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Dept</th>
+                        <th>Arrival</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    \{{#each result}}
+                    <tr>
+                        <td>\{{trainno}}</td>
+                        <td>\{{name}}</td>
+                        <td>\{{cls}}</td>
+                        <td>\{{from}}</td>
+                        <td>\{{to}}</td>
+                        <td>\{{dep}}</td>
+                        <td>\{{arr}}</td>
+
+                    </tr>
+                    \{{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+</head>
+
+<body>
+    {{{body}}}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Project name</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Profile</a>
+                    </li>
+                    <li><a href="#">Help</a>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search...">
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <!--li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li-->
+                    <li class="active"><a href="#">Trains</a>
+                    </li>
+                    <li><a href="#">Route</a>
+                    </li>
+                    <li><a href="#">Fare</a>
+                    </li>
+                    <li><a href="#">PNR Status</a>
+                    </li>
+                    <li><a href="#">Live Status</a>
+                    </li>
+                    <li><a href="#">Seat Availability</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div id="query">
+                    {{{_sections.query}}}
+                </div>
+                <div id="result">
+                    {{{_sections.result}}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- adding libs-->
+    <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
+    <script src="../js/view-handler.js"></script>
+</body>
+
+</html>
