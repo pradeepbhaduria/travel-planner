@@ -12,6 +12,7 @@ var home = function (req, res) {
 var getTrains = function (req, res) {
     'use strict';
     console.log("params: ", req.body.params);
+    console.log("params: ", req.url);
     //==
     var handleResponse = function (response) {
         console.log("statusCode: ", response.statusCode);
@@ -21,19 +22,20 @@ var getTrains = function (req, res) {
         });
 
         response.on('end', function () {
-           // console.log(JSON.parse(data));
+            // console.log(JSON.parse(data));
             res.send({
                 result: JSON.parse(data).result
             });
         });
     };
-    var path = '/trains/?key=' + credentials.erail.key,
+    var path = req.url + '/?key=' + credentials.erail.key,
         key;
     for (key in req.body.params) {
         if (req.body.params.hasOwnProperty(key)) {
             path = path + "&" + key + "=" + req.body.params[key];
         }
     }
+    console.log('path:', path);
     // options for GET
     var options = {
         host: 'api.erail.in', // here only the domain name

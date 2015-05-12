@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,10 +14,42 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- Custom styles for this template -->
     <link href="../css/travel-planner.css" rel="stylesheet">
-    {{{_sections.trains-query-template}}}
-    {{{_sections.trains-result-template}}}
-    <script id="trains-template" type="text/x-handlebars-template">
-        <h2 class="sub-header">Section Result</h2>
+    <script id="trains-query-template" type="text/x-handlebars-template">
+        <h1 class="page-header">Trains</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-8 placeholder">
+                <form class="form-horizontal trainsForm" role="form" action="/trains" method="POST">
+                    <div class="form-group">
+                        <label for="fieldStnfrom" class="col-sm-3 control-label">Source Station</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="fieldStnfrom" name="stnfrom">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldStnto" class="col-sm-3 control-label">Destination</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldStnto" name="stnto">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fieldDate" class="col-sm-3 control-label">Date</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" required id="fieldDate" name="date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <button type="submit" class="btn btn-default" id="findTrains">Find Trains</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+    <script id="trains-result-template" type="text/x-handlebars-template">
+        <h2 class="sub-header">Trains Result</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -41,6 +74,57 @@
                         <td>\{{dep}}</td>
                         <td>\{{arr}}</td>
 
+                    </tr>
+                    \{{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script id="pnr-query-template" type="text/x-handlebars-template">
+        <h1 class="page-header">GET PNR STATUS</h1>
+        <div class="row placeholders" >
+            <div class="col-xs-6 col-sm-8 placeholder">
+                <form class="form-horizontal trainsForm" role="form" action="/pnr" method="POST">
+                    <div class="form-group">
+                        <label for="fieldpnr" class="col-sm-3 control-label">Enter PNR Number</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="fieldpnr" name="pnr">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <button type="submit" class="btn btn-default" id="findpnr">Check PNR Status</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+    <script id="pnr-result-template" type="text/x-handlebars-template">
+        <h2 class="sub-header">Trains Result</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>PNR No.</th>
+                        <th>Train No.</th>
+                        <th>Name</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Boarding at</th>
+                        <th>Journey Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    \{{#each result}}
+                    <tr>
+                        <td>\{{pnr}}</td>
+                        <td>\{{trainno}}</td>
+                        <td>\{{name}}</td>
+                        <td>\{{from}}</td>
+                        <td>\{{to}}</td>
+                        <td>\{{brdg}}</td>
+                        <td>\{{journey}}</td>
                     </tr>
                     \{{/each}}
                 </tbody>
@@ -78,19 +162,19 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
+                <ul class="nav nav-sidebar" id='nav-sidebar'>
                     <!--li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li-->
-                    <li class="active"><a href="#">Trains</a>
+                    <li id='trains' class="active"><a href="#">Trains</a>
                     </li>
-                    <li><a href="#">Route</a>
+                    <li id='route'><a href="#">Route</a>
                     </li>
-                    <li><a href="#">Fare</a>
+                    <li id='fare'><a href="#">Fare</a>
                     </li>
-                    <li><a href="#">PNR Status</a>
+                    <li id='pnr'><a href="#">PNR Status</a>
                     </li>
-                    <li><a href="#">Live Status</a>
+                    <li id='live'><a href="#">Live Status</a>
                     </li>
-                    <li><a href="#">Seat Availability</a>
+                    <li id='seats'><a href="#">Seat Availability</a>
                     </li>
                 </ul>
             </div>
