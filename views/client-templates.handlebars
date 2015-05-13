@@ -1,34 +1,33 @@
 {{#section 'query'}}
-<h1 class="page-header">Trains</h1> 
-<div class="row placeholders" id ='queryCointainer'>
+<h1 class="page-header">Current Status</h1>
+<div class="row placeholders">
     <div class="col-xs-6 col-sm-8 placeholder">
-        <form class="form-horizontal trainsForm" role="form" action="/trains" method="POST">
+        <form class="form-horizontal routeForm" role="form" action="/live" method="POST">
+            <div class="form-group">
+                <label for="fieldpnr" class="col-sm-3 control-label">Enter Train No</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" required id="fieldTrainNo" name="trainno">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="fieldStnfrom" class="col-sm-3 control-label">Source Station</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" id="fieldStnfrom" name="stnfrom">
+                    <input type="text" class="form-control" required id="fieldStnfrom" name="stnfrom">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="fieldStnto" class="col-sm-3 control-label">Destination</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" required id="fieldStnto" name="stnto">
-                </div>
-            </div>
-            
+
             <div class="form-group">
                 <label for="fieldDate" class="col-sm-3 control-label">Date</label>
                 <div class="col-sm-4">
                     <input type="date" class="form-control" required id="fieldDate" name="date">
                 </div>
             </div>
-            
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-6">
-                    <button type="submit" class="btn btn-default" id="findTrains">Find Trains</button>
+                    <button type="submit" class="btn btn-default" id="findRoute">Get Current Status</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-{{/section}} 
+{{/section}}

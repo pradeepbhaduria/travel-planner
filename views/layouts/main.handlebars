@@ -22,20 +22,20 @@
                     <div class="form-group">
                         <label for="fieldStnfrom" class="col-sm-3 control-label">Source Station</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="fieldStnfrom" name="stnfrom">
+                            <input type="text" class="form-control" required id="fieldStnfrom" name="stnfrom">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="fieldStnto" class="col-sm-3 control-label">Destination</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" required id="fieldStnto" name="stnto">
+                            <input type="text" class="form-control" required required id="fieldStnto" name="stnto">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="fieldDate" class="col-sm-3 control-label">Date</label>
                         <div class="col-sm-4">
-                            <input type="date" class="form-control" required id="fieldDate" name="date">
+                            <input type="date" class="form-control" required required id="fieldDate" name="date">
                         </div>
                     </div>
 
@@ -82,13 +82,13 @@
     </script>
     <script id="pnr-query-template" type="text/x-handlebars-template">
         <h1 class="page-header">GET PNR STATUS</h1>
-        <div class="row placeholders" >
+        <div class="row placeholders">
             <div class="col-xs-6 col-sm-8 placeholder">
-                <form class="form-horizontal trainsForm" role="form" action="/pnr" method="POST">
+                <form class="form-horizontal pnrForm" role="form" action="/pnr" method="POST">
                     <div class="form-group">
                         <label for="fieldpnr" class="col-sm-3 control-label">Enter PNR Number</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="fieldpnr" name="pnr">
+                            <input type="text" class="form-control" required id="fieldpnr" name="pnr">
                         </div>
                     </div>
                     <div class="form-group">
@@ -101,7 +101,7 @@
         </div>
     </script>
     <script id="pnr-result-template" type="text/x-handlebars-template">
-        <h2 class="sub-header">Trains Result</h2>
+        <h3 class="sub-header">PNR Status Result</h3>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -111,22 +111,259 @@
                         <th>Name</th>
                         <th>From</th>
                         <th>To</th>
+                        <th>Class</th>
                         <th>Boarding at</th>
                         <th>Journey Date</th>
+                        <th>Charting Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    \{{#each result}}
                     <tr>
-                        <td>\{{pnr}}</td>
-                        <td>\{{trainno}}</td>
-                        <td>\{{name}}</td>
-                        <td>\{{from}}</td>
-                        <td>\{{to}}</td>
-                        <td>\{{brdg}}</td>
-                        <td>\{{journey}}</td>
+                        <td>\{{result.pnr}}</td>
+                        <td>\{{result.trainno}}</td>
+                        <td>\{{result.name}}</td>
+                        <td>\{{result.from}}</td>
+                        <td>\{{result.to}}</td>
+                        <td>\{{result.cls}}</td>
+                        <td>\{{result.brdg}}</td>
+                        <td>\{{result.journey}}</td>
+                        <td>\{{result.chart}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4 class="sub-header">Passengers</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Booking Status</th>
+                        <th>Current Status</th>
+                        <th>Coach</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    \{{#each result.passengers}}
+                    <tr>
+                        <td>\{{math @index "+" 1}}</td>
+                        <td>\{{bookingstatus}}</td>
+                        <td>\{{currentstatus}}</td>
+                        <td>\{{coach}}</td>
                     </tr>
                     \{{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script id="route-query-template" type="text/x-handlebars-template">
+        <h1 class="page-header">TRAIN ROUTE</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-8 placeholder">
+                <form class="form-horizontal routeForm" role="form" action="/route" method="POST">
+                    <div class="form-group">
+                        <label for="fieldpnr" class="col-sm-3 control-label">Enter Train No</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldRoute" name="trainno">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <button type="submit" class="btn btn-default" id="findRoute">Get Route</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+    <script id="route-result-template" type="text/x-handlebars-template">
+        <h2 class="sub-header">Station Routes</h2>
+        <!--
+    <div><span>Train No: </span><span>\{{result.trainno}}</span>
+    </div>
+    <div><span>Train Name: </span><span>\{{result.name}}</span>
+    </div>
+    <h4>Routes</h4>
+-->
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Station Code</th>
+                        <th>Station Name</th>
+                        <th>Arrival</th>
+                        <th>Departure</th>
+                        <th>Day</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                \{{#each result.route}}
+                <tbody>
+                    \{{#each stn}}
+                    <tr>
+                        <td>\{{code}}</td>
+                        <td>\{{name}}</td>
+                        <td>\{{arr}}</td>
+                        <td>\{{dep}}</td>
+                        <td>\{{day}}</td>
+                        <td>\{{remark}}</td>
+                    </tr>
+                    \{{/each}}
+                </tbody>
+                \{{/each}}
+            </table>
+        </div>
+    </script>
+    <script id="live-query-template" type="text/x-handlebars-template">
+        <h1 class="page-header">Current Status</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-8 placeholder">
+                <form class="form-horizontal routeForm" role="form" action="/live" method="POST">
+                    <div class="form-group">
+                        <label for="fieldpnr" class="col-sm-3 control-label">Enter Train No</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldTrainNo" name="trainno">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldStnfrom" class="col-sm-3 control-label">Source Station</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldStnfrom" name="stnfrom">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fieldDate" class="col-sm-3 control-label">Date</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" required id="fieldDate" name="date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <button type="submit" class="btn btn-default" id="findRoute">Get Current Status</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+    <script id="live-result-template" type="text/x-handlebars-template">
+        <h2 class="sub-header">Status</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Train Name</th>
+                        <th>Station From</th>
+                        <th>Scheduled Arrival</th>
+                        <th>Scheduled Departure</th>
+                        <th>Actual Arrival</th>
+                        <th>Actual Departure</th>
+                        <th>Delay in Departure(mins)</th>
+                        <th>Delay in Arrival(mins)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>\{{result.name}}</td>
+                        <td>\{{result.fromname}}</td>
+                        <td>\{{result.scharr}}</td>
+                        <td>\{{result.schdep}}</td>
+                        <td>\{{result.actarr}}</td>
+                        <td>\{{result.actdep}}</td>
+                        <td>\{{result.delaydep}}</td>
+                        <td>\{{result.delayarr}}</td>
+                        <td>\{{result.statusmsg}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script id="seats-query-template" type="text/x-handlebars-template">
+        <h1 class="page-header">Trains</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-8 placeholder">
+                <form class="form-horizontal seatsForm" role="form" action="/seats" method="POST">
+                    <div class="form-group">
+                        <label for="fieldpnr" class="col-sm-3 control-label">Enter Train No</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldTrainNo" name="trainno">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldStnfrom" class="col-sm-3 control-label">Source Station</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldStnfrom" name="stnfrom">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldStnto" class="col-sm-3 control-label">Destination</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required required id="fieldStnto" name="stnto">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldQuota" class="col-sm-3 control-label">Select Quota</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldQuota" name="quota">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldClass" class="col-sm-3 control-label">Select Class</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" required id="fieldClass" name="class">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fieldDate" class="col-sm-3 control-label">Date</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" required required id="fieldDate" name="date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <button type="submit" class="btn btn-default" id="findSeats">Find Seats</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+    <script id="seats-result-template" type="text/x-handlebars-template">
+        <h2 class="sub-header">Seats Availibility</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Train No</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Class</th>
+                        <th>Quota</th>
+                        <th>Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>\{{result.trainno}}</td>
+                        <td>\{{result.from}}</td>
+                        <td>\{{result.to}}</td>
+                        <td>\{{result.cls}}</td>
+                        <td>\{{result.quota}}</td>
+                        <td>
+                            <table class="table table-striped">
+                                <tbody>
+                                    \{{#each result.seats}}
+                                    <tr>
+                                        <td>\{{date}}</td>
+                                        <td>\{{seat}}</td>
+                                    </tr>
+                                    \{{/each}}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -164,18 +401,19 @@
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar" id='nav-sidebar'>
                     <!--li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li-->
-                    <li id='trains' class="active"><a href="#">Trains</a>
+                    <li id='live' class="active"><a href="#">Live Status</a>
+                    </li>
+                    <li id='pnr'><a href="#">PNR Status</a>
+                    </li>
+                    <li id='seats'><a href="#">Seat Availability</a>
+                    </li>
+                    <li id='trains'><a href="#">Trains</a>
                     </li>
                     <li id='route'><a href="#">Route</a>
                     </li>
                     <li id='fare'><a href="#">Fare</a>
                     </li>
-                    <li id='pnr'><a href="#">PNR Status</a>
-                    </li>
-                    <li id='live'><a href="#">Live Status</a>
-                    </li>
-                    <li id='seats'><a href="#">Seat Availability</a>
-                    </li>
+
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
