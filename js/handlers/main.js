@@ -11,8 +11,7 @@ var home = function (req, res) {
 
 var getTrains = function (req, res) {
     'use strict';
-    console.log("params: ", req.body.params);
-    console.log("params: ", req.url);
+    console.log("params: ", req.url, req.body.params);
     //==
     var handleResponse = function (response) {
         console.log("statusCode: ", response.statusCode);
@@ -35,7 +34,6 @@ var getTrains = function (req, res) {
             path = path + "&" + key + "=" + req.body.params[key];
         }
     }
-    console.log('path:', path);
     // options for GET
     var options = {
         host: 'api.erail.in', // here only the domain name
@@ -47,7 +45,7 @@ var getTrains = function (req, res) {
 
     reqGet.end();
     reqGet.on('error', function (e) {
-        console.error(e);
+        console.error("Error in fetching data: ",e);
     });
     //======
 

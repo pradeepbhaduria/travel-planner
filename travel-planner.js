@@ -4,7 +4,8 @@
 var express = require('express'),
     fs = require('fs'),
     bodyParser = require('body-parser'),
-    app = express();
+    app = express(),
+    x = require('./js/autocomplete/station.js');
 
 var handlebars = require('express3-handlebars').create({
     defaultLayout: 'main',
